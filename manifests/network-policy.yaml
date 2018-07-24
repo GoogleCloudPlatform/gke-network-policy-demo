@@ -1,0 +1,44 @@
+# Copyright 2018 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+# This network policy places restrictions on which pods can communicate to the
+# hello-server service. Network policies can be thought of as in-cluster firewall
+# rules, where the source and destination are specified as selectors. In this case
+# we use labels as the selection criteria.
+# See https://kubernetes.io/docs/concepts/services-networking/network-policies/
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  # Name the network policy
+  name: hello-server-allow-from-hello-client
+spec:
+
+  # Define this as an ingress rule which allows us to restrict access to a set of pods.
+  policyTypes:
+  - Ingress
+
+  # Defines the set of pods to which this policy applies
+  # In this case, we apply the policy to pods labeled as app=hello-server
+  podSelector:
+    matchLabels:
+      app: hello-server
+
+  # Define the sources allowed by this policy
+  # In this case, we allow ingress from all pods labeled as app=hello
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: hello
