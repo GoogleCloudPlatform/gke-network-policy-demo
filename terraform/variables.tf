@@ -35,7 +35,7 @@ variable "zone" {
 }
 
 /*
-Optional Variables 
+Optional Variables
 
 Defaults will be used for these, if not overridden at runtime.
 */
