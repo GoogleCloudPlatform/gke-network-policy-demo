@@ -58,5 +58,3 @@ fi
 # Clean Up
 
 $COMMAND "kubectl delete -f ./manifests/network-policy.yaml" &> /dev/null
-
-#$COMMAND "kubectl delete -f ./manifests/hello-app/"
