@@ -37,7 +37,7 @@ spec:
 
   # Define the sources allowed by this policy
   # In this case, we allow ingress from all pods the namespace labeled as team=hello
-  # Note: as of Kubernetes 1.10. It is not possible to restrict connections 
+  # Note: as of Kubernetes 1.10. It is not possible to restrict connections
   # by both namespace and pod labels simultaneously. However support is
   # expected to be added in the future.
   ingress:
