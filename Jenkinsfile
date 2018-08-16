@@ -102,7 +102,6 @@ stages {
     stage('create') {
       steps {
         container('k8s-node') {
-          sh "export USER=jenkins"
           sh "make create"
         }
       }

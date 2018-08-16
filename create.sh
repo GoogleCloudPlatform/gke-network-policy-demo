@@ -28,6 +28,8 @@ set -o pipefail
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck disable=SC1090
 source "$ROOT"/common.sh
+# GKE cluster name
+GKE_CLUSTER=gke-demo-cluster
 
 # Enable Compute Engine, Kubernetes Engine, and Container Builder
 echo "Enabling the Compute API"
@@ -45,5 +47,7 @@ cd "$ROOT"/terraform && \
 terraform init -input=false && \
 terraform apply -input=false -auto-approve
 
+# make sure kubectl is configured
+gcloud container clusters get-credentials "${GKE_CLUSTER}" --zone "${ZONE}" --project "${PROJECT}"
 # Roll out hello-app
 gcloud compute ssh "${USER}"@"${BASTION_INSTANCE_NAME}" --command "kubectl create -f manifests/hello-app/"
