@@ -32,7 +32,7 @@ command -v gcloud >/dev/null 2>&1 || { \
 BASTION_INSTANCE_NAME=gke-demo-bastion
 # set to jenkins if there is no $USER
 USER=$(whoami)
-[[ -z "${USER}" ]] && export USER=jenkins
+[[ "${USER}" == "root" ]] && export USER=jenkins
 echo "user is $USER"
 
 # enable gcloud api
