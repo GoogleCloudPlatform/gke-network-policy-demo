@@ -47,7 +47,6 @@ cd "$ROOT"/terraform && \
 terraform init -input=false && \
 terraform apply -input=false -auto-approve
 
-set -x
 # make sure kubectl is configured
 gcloud compute ssh "${USER}"@"${BASTION_INSTANCE_NAME}" \
   --command "gcloud container clusters get-credentials ${GKE_CLUSTER} --zone ${ZONE} --project ${PROJECT}"
