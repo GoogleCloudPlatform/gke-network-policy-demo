@@ -80,7 +80,7 @@ resource "google_compute_instance" "gke-bastion" {
         USER=jenkins
         READY=""
         for i in $(seq 1 18); do
-          if gcloud compute ssh ${var.bastion_hostname} --command uptime; then
+          if gcloud compute ssh --verbosity=debug ${var.bastion_hostname} --command uptime; then
             READY="yes"
             break;
           fi
@@ -94,7 +94,7 @@ resource "google_compute_instance" "gke-bastion" {
           exit 1
         fi
 
-        gcloud compute --project ${var.project} scp --zone ${var.zone} --recurse ../manifests ${var.bastion_hostname}:
+        gcloud compute  --project ${var.project} scp --verbosity=debug --zone ${var.zone} --recurse ../manifests ${var.bastion_hostname}:
 EOF
   }
 }
