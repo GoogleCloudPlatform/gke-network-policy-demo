@@ -87,7 +87,7 @@ stages {
           sh "gcloud config set compute/zone ${env.ZONE}"
 
           // Setup SSH for jenkins users so that gcloud ssh/scp can use it
-          sh "echo 'USER jenkins' >  ~/.ssh/config"
+          sh "mkdir -p ~/.ssh && echo 'USER jenkins' >  ~/.ssh/config"
          }
         }
     }
