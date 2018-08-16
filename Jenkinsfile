@@ -66,28 +66,82 @@ spec:
 
 
   stages {
+
+    // stage('Setup access') {
+    //   steps {
+    //    container('k8s-node') {
+    //       script {
+    //             // env.CLUSTER_ZONE will need to be updated to match the
+    //             // ZONE in the jenkins.propeties file
+    //             env.CLUSTER_ZONE = "${CLUSTER_ZONE}"
+    //             // env.PROJECT_ID will need to be updated to match your GCP
+    //             // development project id
+    //             env.PROJECT_ID = "${PROJECT_ID}"
+    //             env.REGION = "${REGION}"
+    //             //env.CLUSTER_NAME = "${CLUSTER_NAME}"
+    //             env.KEYFILE = "/home/jenkins/dev/jenkins-deploy-dev-infra.json"
+    //         }
+    //       // Setup gcloud service account access
+    //       sh "gcloud auth activate-service-account --key-file=${env.KEYFILE}"
+    //       sh "gcloud config set compute/zone ${env.CLUSTER_ZONE}"
+    //       sh "gcloud config set core/project ${env.PROJECT_ID}"
+    //       sh "gcloud config set container/cluster ${env.CLUSTER_NAME}"
+    //       sh "gcloud config set compute/region ${env.REGION}"
+    //      }
+    //     }
+    // }
     stage('Setup access') {
       steps {
         container('k8s-node') {
           script {
+                env.PROJECT_ID = "${PROJECT_ID}"
                 env.KEYFILE = "/home/jenkins/dev/jenkins-deploy-dev-infra.json"
             }
           // Setup gcloud service account access
           sh "gcloud auth activate-service-account --key-file=${env.KEYFILE}"
+          sh "gcloud config set core/project ${env.PROJECT_ID}"
          }
         }
     }
 
-    stage('makeall') {
+    stage('linter') {
       steps {
         container('k8s-node') {
           // Checkout code from repository
           checkout scm
-
           sh "make all"
         }
       }
     }
+
+    stage('create') {
+      steps {
+        container('k8s-node') {
+          sh "make create"
+        }
+      }
+    }
+
+    stage('validate') {
+      steps {
+        container('k8s-node') {
+          script {
+            for (int i = 0; i < 3; i++) {
+               sh "make validate"
+            }
+          }
+        }
+      }
+    }
+
+    stage('delete') {
+      steps {
+        container('k8s-node') {
+          sh "make delete"
+        }
+      }
+    }
+
   }
 
   post {
