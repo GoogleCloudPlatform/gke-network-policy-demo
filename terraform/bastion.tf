@@ -77,6 +77,7 @@ resource "google_compute_instance" "gke-bastion" {
   // Copy the manifests to the bastion
   provisioner "local-exec" {
     command = <<EOF
+        export USER=jenkins
         READY=""
         for i in $(seq 1 18); do
           if gcloud compute ssh --verbosity=debug ${var.bastion_hostname} --command uptime; then

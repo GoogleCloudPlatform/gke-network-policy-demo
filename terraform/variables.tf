@@ -118,3 +118,9 @@ variable "vpc_name" {
   type        = "string"
   default     = "kube-net"
 }
+
+variable "ssh_user_bastion" {
+  description = "ssh user for bastion server"
+  type        = "string"
+  default     = "jenkins"
+}
