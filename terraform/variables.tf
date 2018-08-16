@@ -76,7 +76,7 @@ variable "ip_range" {
 }
 
 variable "master_cidr_block" {
-  description = "THe CIDR from which to allocate master IPs"
+  description = "The CIDR from which to allocate master IPs"
   type        = "string"
   default     = "10.0.90.0/28"
 }
