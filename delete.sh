@@ -29,8 +29,8 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck disable=SC1090
 source "$ROOT"/common.sh
 
-# tear down hello-app 
-gcloud compute ssh ${BASTION_INSTANCE_NAME} --command "kubectl delete -f manifests/hello-app/"
-
+# Tear down hello-app
+gcloud compute ssh "${BASTION_INSTANCE_NAME}" --command "kubectl delete -f manifests/hello-app/"
+# Terraform destroy
 cd terraform && terraform destroy -auto-approve
 

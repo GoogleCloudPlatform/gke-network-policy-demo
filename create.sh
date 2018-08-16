@@ -45,5 +45,5 @@ cd "$ROOT"/terraform && \
 terraform init -input=false && \
 terraform apply -input=false -auto-approve
 
-# Roll out hello-app 
-gcloud compute ssh ${BASTION_INSTANCE_NAME} --command "kubectl create -f manifests/hello-app/"
+# Roll out hello-app
+gcloud compute ssh "${BASTION_INSTANCE_NAME}" --command "kubectl create -f manifests/hello-app/"
