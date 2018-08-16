@@ -64,8 +64,11 @@ spec:
     }
   }
 
+environment {
+        GOOGLE_APPLICATION_CREDENTIALS    = '/home/jenkins/dev/jenkins-deploy-dev-infra.json'
+}
 
-  stages {
+stages {
 
     stage('Setup access') {
       steps {
@@ -123,7 +126,7 @@ spec:
       }
     }
 
-  }
+}
 
   post {
     always {
