@@ -85,6 +85,7 @@ stages {
           sh "gcloud config set core/project ${env.PROJECT_ID}"
           sh "gcloud config set compute/region ${env.REGION}"
           sh "gcloud config set compute/zone ${env.ZONE}"
+          sh "export USER=jenkins"
          }
         }
     }

@@ -30,7 +30,7 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$ROOT"/common.sh
 
 # Tear down hello-app
-gcloud compute ssh "${BASTION_INSTANCE_NAME}" --command "kubectl delete -f manifests/hello-app/"
+gcloud compute ssh "${USER}"@"${BASTION_INSTANCE_NAME}" --command "kubectl delete -f manifests/hello-app/"
 # Terraform destroy
 cd terraform && terraform destroy -auto-approve
 

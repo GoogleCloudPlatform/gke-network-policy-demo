@@ -31,12 +31,6 @@ command -v gcloud >/dev/null 2>&1 || { \
 # bastion set up
 BASTION_INSTANCE_NAME=gke-demo-bastion
 
-# set USER as jenkins if root is the $USER
-# this is for CICD automation
-[[ -z "$USER" ]] && export USER=jenkins
-
-echo "USER=$USER"
-
 # enable gcloud api
 function enable_api() {
   SERVICE=$1
@@ -53,7 +47,7 @@ function enable_api() {
 # validate deployment status via bastion server
 function validate_deployment_bastion() {
     deployment=$1
-    ROLLOUT=$(gcloud compute ssh ${BASTION_INSTANCE_NAME} --command "kubectl rollout status deploy/${deployment}")
+    ROLLOUT=$(gcloud compute ssh "${USER}"@"${BASTION_INSTANCE_NAME}" --command "kubectl rollout status deploy/${deployment}")
     MESSAGE="deployment \"${deployment}\" successfully rolled out"
     # Test the ROLLOUT variable to see if the grep has returned the expected value.
     # Depending on the test print success or failure messages.
