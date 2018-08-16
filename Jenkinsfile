@@ -85,7 +85,6 @@ stages {
           sh "gcloud config set core/project ${env.PROJECT_ID}"
           sh "gcloud config set compute/region ${env.REGION}"
           sh "gcloud config set compute/zone ${env.ZONE}"
-          sh "export USER=jenkins"
          }
         }
     }
@@ -103,6 +102,7 @@ stages {
     stage('create') {
       steps {
         container('k8s-node') {
+          sh "export USER=jenkins"
           sh "make create"
         }
       }
