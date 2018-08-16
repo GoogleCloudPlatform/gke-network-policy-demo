@@ -64,6 +64,7 @@ spec:
     }
   }
 
+// required by Terraform
 environment {
         GOOGLE_APPLICATION_CREDENTIALS    = '/home/jenkins/dev/jenkins-deploy-dev-infra.json'
 }
