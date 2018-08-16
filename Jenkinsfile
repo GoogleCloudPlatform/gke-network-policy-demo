@@ -32,7 +32,7 @@ metadata:
     jenkins: build-node
 spec:
   containers:
-  - name: k8s-node
+  - name: k8s-node-network-policy
     image: gcr.io/pso-helmsman-cicd/jenkins-k8s-node:1.0.1
     imagePullPolicy: Always
     command:
@@ -92,7 +92,7 @@ spec:
     // }
     stage('Setup access') {
       steps {
-        container('k8s-node') {
+        container('k8s-node-network-policy') {
           script {
                 env.PROJECT_ID = "${PROJECT_ID}"
                 env.KEYFILE = "/home/jenkins/dev/jenkins-deploy-dev-infra.json"
@@ -106,7 +106,7 @@ spec:
 
     stage('linter') {
       steps {
-        container('k8s-node') {
+        container('k8s-node-network-policy') {
           // Checkout code from repository
           checkout scm
           sh "make all"
@@ -116,7 +116,7 @@ spec:
 
     stage('create') {
       steps {
-        container('k8s-node') {
+        container('k8s-node-network-policy') {
           sh "make create"
         }
       }
@@ -124,7 +124,7 @@ spec:
 
     stage('validate') {
       steps {
-        container('k8s-node') {
+        container('k8s-node-network-policy') {
           script {
             for (int i = 0; i < 3; i++) {
                sh "make validate"
@@ -136,7 +136,7 @@ spec:
 
     stage('delete') {
       steps {
-        container('k8s-node') {
+        container('k8s-node-network-policy') {
           sh "make delete"
         }
       }
@@ -146,7 +146,7 @@ spec:
 
   post {
     always {
-      container('k8s-node') {
+      container('k8s-node-network-policy') {
         sh 'gcloud auth revoke'
       }
     }
