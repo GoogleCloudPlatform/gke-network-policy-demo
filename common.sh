@@ -33,7 +33,7 @@ BASTION_INSTANCE_NAME=gke-demo-bastion
 
 # set USER as jenkins if root is the $USER
 # this is for CICD automation
-[[ "$USER" == "root" ]] && export USER=jenkins
+[[ -z "$USER" ]] && export USER=jenkins
 
 echo "USER=$USER"
 
