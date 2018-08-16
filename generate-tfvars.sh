@@ -63,6 +63,7 @@ else
 project="${PROJECT}"
 region="${REGION}"
 zone="${ZONE}"
+ssh_user_bastion="${USER}"
 EOF
 fi
 )

@@ -28,7 +28,14 @@ command -v git >/dev/null 2>&1 || { \
 command -v gcloud >/dev/null 2>&1 || { \
  echo >&2 "I require gcloud but it's not installed.  Aborting."; exit 1; }
 
+# bastion set up
 BASTION_INSTANCE_NAME=gke-demo-bastion
+
+# set USER as jenkins if root is the $USER
+# this is for CICD automation
+[[ "$USER" == "root" ]] && export USER=jenkins
+
+echo "USER=$USER"
 
 # enable gcloud api
 function enable_api() {
