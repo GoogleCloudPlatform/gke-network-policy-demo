@@ -45,8 +45,8 @@ echo "step 2 of the validation passed."
 # Apply the network policy.
 call_bastion "kubectl apply -f ./manifests/network-policy.yaml" &> /dev/null
 
-# Sleep for 3s while more logs come in.
-sleep 3
+# Sleep for 10s while more logs come in.
+sleep 10
 
 # Now we expect to see a 'timed out' message because the network policy
 # prevents the communication.

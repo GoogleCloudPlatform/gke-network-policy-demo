@@ -31,6 +31,10 @@ source "$ROOT"/common.sh
 
 # Tear down hello-app
 gcloud compute ssh "${USER}"@"${BASTION_INSTANCE_NAME}" --command "kubectl delete -f manifests/hello-app/"
+
+# remove metadata for bastion (SSH keys)
+gcloud compute instances remove-metadata --all "${BASTION_INSTANCE_NAME}" --project "${PROJECT}" --zone "${ZONE}"
+
 # Terraform destroy
 cd terraform && terraform destroy -auto-approve
 
