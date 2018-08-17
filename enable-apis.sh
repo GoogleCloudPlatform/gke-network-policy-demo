@@ -37,10 +37,8 @@ then
 fi
 
 # Enable Compute Engine, Kubernetes Engine, and Container Builder
-echo "Enabling the Compute API"
-gcloud services enable compute.googleapis.com
-echo "Enabling the Container API."
-gcloud services enable container.googleapis.com
-echo "Enabling the Cloud Build API."
-gcloud services enable cloudbuild.googleapis.com
-echo "APIs enabled successfully."
+echo "Enabling the Compute API, the Container API, the Cloud Build API"
+gcloud services enable \
+compute.googleapis.com \
+container.googleapis.com \
+cloudbuild.googleapis.com

@@ -30,15 +30,13 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$ROOT"/common.sh
 
 # Enable Compute Engine, Kubernetes Engine, and Container Builder
-echo "Enabling the Compute API"
-enable_api compute.googleapis.com
-echo "Enabling the Container API."
-enable_api container.googleapis.com
-echo "Enabling the Cloud Build API."
-enable_api cloudbuild.googleapis.com
-echo "APIs enabled successfully."
+echo "Enabling the Compute API, the Container API, the Cloud Build API"
+gcloud services enable \
+compute.googleapis.com \
+container.googleapis.com \
+cloudbuild.googleapis.com
 
-# Runs the generate-tfvars.sh
+Runs the generate-tfvars.sh
 "$ROOT"/generate-tfvars.sh
 
 cd "$ROOT"/terraform && \
@@ -47,10 +45,3 @@ terraform apply -input=false -auto-approve
 
 # Roll out hello-app
 "$ROOT"/setup_manifests.sh
-
-# make sure kubectl is configured
-# gcloud compute ssh "${USER}"@"${BASTION_INSTANCE_NAME}" \
-#   --command "gcloud container clusters get-credentials ${GKE_CLUSTER} --zone ${ZONE} --project ${PROJECT}"
-# Roll out hello-app
-#gcloud compute ssh "${USER}"@"${BASTION_INSTANCE_NAME}" --command "kubectl create -f manifests/hello-app/"
-

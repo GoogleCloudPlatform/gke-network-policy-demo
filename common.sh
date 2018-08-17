@@ -33,20 +33,8 @@ BASTION_INSTANCE_NAME=gke-demo-bastion
 # set to jenkins if there is no $USER
 USER=$(whoami)
 [[ "${USER}" == "root" ]] && export USER=jenkins
-echo "user is $USER"
+echo "user is: $USER"
 
-# enable gcloud api
-function enable_api() {
-  SERVICE=$1
-  if [[ $(gcloud services list --format="value(serviceConfig.name)" \
-                                --filter="serviceConfig.name:$SERVICE" 2>&1) != \
-                                "$SERVICE" ]]; then
-    echo "Enabling $SERVICE"
-    gcloud services enable "$SERVICE"
-  else
-    echo "$SERVICE is already enabled"
-  fi
-}
 
 # validate deployment status via bastion server
 function validate_deployment_bastion() {
