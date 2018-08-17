@@ -47,8 +47,12 @@ cd "$ROOT"/terraform && \
 terraform init -input=false && \
 terraform apply -input=false -auto-approve
 
-# make sure kubectl is configured
-gcloud compute ssh "${USER}"@"${BASTION_INSTANCE_NAME}" \
-  --command "gcloud container clusters get-credentials ${GKE_CLUSTER} --zone ${ZONE} --project ${PROJECT}"
 # Roll out hello-app
-gcloud compute ssh "${USER}"@"${BASTION_INSTANCE_NAME}" --command "kubectl create -f manifests/hello-app/"
+"$ROOT"/setup_manifests.sh
+
+# make sure kubectl is configured
+# gcloud compute ssh "${USER}"@"${BASTION_INSTANCE_NAME}" \
+#   --command "gcloud container clusters get-credentials ${GKE_CLUSTER} --zone ${ZONE} --project ${PROJECT}"
+# Roll out hello-app
+#gcloud compute ssh "${USER}"@"${BASTION_INSTANCE_NAME}" --command "kubectl create -f manifests/hello-app/"
+
