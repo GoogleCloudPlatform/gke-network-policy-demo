@@ -24,7 +24,7 @@ source "$ROOT"/common.sh
 call_bastion() {
   local command=$1; shift;
   # shellcheck disable=SC2005
-  echo "$(gcloud compute ssh ${USER}@gke-demo-bastion --command "${command}")"
+  echo "$(gcloud compute ssh "${USER}"@gke-demo-bastion --command "${command}")"
 }
 MESSAGE="successfully rolled out"
 

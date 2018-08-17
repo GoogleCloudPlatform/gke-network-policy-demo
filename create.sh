@@ -28,8 +28,6 @@ set -o pipefail
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck disable=SC1090
 source "$ROOT"/common.sh
-# GKE cluster name
-GKE_CLUSTER=gke-demo-cluster
 
 # Enable Compute Engine, Kubernetes Engine, and Container Builder
 echo "Enabling the Compute API"
