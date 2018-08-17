@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash -e
 
 # Copyright 2018 Google LLC
 #
@@ -14,27 +14,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# "---------------------------------------------------------"
+# "-                                                       -"
+# "-  Create starts a GKE Cluster and installs             -"
+# "-  a Cassandra StatefulSet                              -"
+# "-                                                       -"
+# "---------------------------------------------------------"
 
+set -o errexit
+set -o nounset
+set -o pipefail
 
-# Stop immediately if something goes wrong
-set -euo pipefail
-
-# Validate the user would like to proceed
-echo
-echo "The following APIs will be enabled in your Google Cloud account:"
-echo "- compute.googleapis.com"
-echo "- container.googleapis.com"
-echo "- cloudbuild.googleapis.com"
-echo
-read -p "Would you like to proceed? [y/n]: " -n 1 -r
-echo
-# Require a "Y" or "y" to proceed. Otherwise abort.
-if [[ ! "$REPLY" =~ ^[Yy]$ ]]
-then
-    # Do not continue. Do not enable the APIs.
-    echo "Exiting without making changes."
-    exit 1
-fi
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# shellcheck disable=SC1090
+source "$ROOT"/common.sh
 
 # Enable Compute Engine, Kubernetes Engine, and Container Builder
 echo "Enabling the Compute API, the Container API, the Cloud Build API"
@@ -42,3 +35,13 @@ gcloud services enable \
 compute.googleapis.com \
 container.googleapis.com \
 cloudbuild.googleapis.com
+
+# Runs the generate-tfvars.sh
+"$ROOT"/generate-tfvars.sh
+
+cd "$ROOT"/terraform && \
+terraform init -input=false && \
+terraform apply -input=false -auto-approve
+
+# Roll out hello-app
+"$ROOT"/setup_manifests.sh
