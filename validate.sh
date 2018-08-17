@@ -15,7 +15,6 @@
 
 # bash "strict-mode", fail immediately if there is a problem
 set -euo pipefail
-set -x
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck disable=SC1090
