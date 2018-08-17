@@ -88,7 +88,7 @@ stages {
          }
         }
     }
-
+    // linter testing
     stage('linter') {
       steps {
         container('k8s-node') {
@@ -98,7 +98,7 @@ stages {
         }
       }
     }
-
+   // create infrastructure
     stage('create') {
       steps {
         container('k8s-node') {
@@ -106,7 +106,7 @@ stages {
         }
       }
     }
-
+    // validate infrastructure
     stage('validate') {
       steps {
         container('k8s-node') {
@@ -118,7 +118,7 @@ stages {
         }
       }
     }
-
+    // delete infrastructure
     stage('delete') {
       steps {
         container('k8s-node') {
