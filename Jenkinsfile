@@ -64,31 +64,70 @@ spec:
     }
   }
 
+// required by Terraform
+environment {
+   GOOGLE_APPLICATION_CREDENTIALS    = '/home/jenkins/dev/jenkins-deploy-dev-infra.json'
+}
 
-  stages {
+stages {
+
     stage('Setup access') {
       steps {
         container('k8s-node') {
           script {
-                env.KEYFILE = "/home/jenkins/dev/jenkins-deploy-dev-infra.json"
+                env.PROJECT_ID = "${PROJECT_ID}"
+                env.REGION = "${REGION}"
+                env.ZONE = "${ZONE}"
+                env.KEYFILE = GOOGLE_APPLICATION_CREDENTIALS
             }
           // Setup gcloud service account access
           sh "gcloud auth activate-service-account --key-file=${env.KEYFILE}"
+          sh "gcloud config set core/project ${env.PROJECT_ID}"
+          sh "gcloud config set compute/region ${env.REGION}"
+          sh "gcloud config set compute/zone ${env.ZONE}"
          }
         }
     }
 
-    stage('makeall') {
+    stage('linter') {
       steps {
         container('k8s-node') {
           // Checkout code from repository
           checkout scm
-
           sh "make all"
         }
       }
     }
-  }
+
+    stage('create') {
+      steps {
+        container('k8s-node') {
+          sh "make create"
+        }
+      }
+    }
+
+    stage('validate') {
+      steps {
+        container('k8s-node') {
+          script {
+            for (int i = 0; i < 3; i++) {
+               sh "make validate"
+            }
+          }
+        }
+      }
+    }
+
+    stage('delete') {
+      steps {
+        container('k8s-node') {
+          sh "make delete"
+        }
+      }
+    }
+
+}
 
   post {
     always {

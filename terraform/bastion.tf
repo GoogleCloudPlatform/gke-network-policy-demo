@@ -76,10 +76,11 @@ resource "google_compute_instance" "gke-bastion" {
 
   // Copy the manifests to the bastion
   provisioner "local-exec" {
+    interpreter = ["/bin/bash", "-c"]
     command = <<EOF
         READY=""
         for i in $(seq 1 18); do
-          if gcloud compute ssh ${var.bastion_hostname} --command uptime; then
+          if gcloud compute ssh ${var.ssh_user_bastion}@${var.bastion_hostname} --command uptime; then
             READY="yes"
             break;
           fi
@@ -93,7 +94,7 @@ resource "google_compute_instance" "gke-bastion" {
           exit 1
         fi
 
-        gcloud compute --project ${var.project} scp --zone ${var.zone} --recurse ../manifests ${var.bastion_hostname}:
+        gcloud compute  --project ${var.project} scp --zone ${var.zone} --recurse ../manifests ${var.ssh_user_bastion}@${var.bastion_hostname}:
 EOF
   }
 }

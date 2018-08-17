@@ -76,7 +76,7 @@ variable "ip_range" {
 }
 
 variable "master_cidr_block" {
-  description = "THe CIDR from which to allocate master IPs"
+  description = "The CIDR from which to allocate master IPs"
   type        = "string"
   default     = "10.0.90.0/28"
 }
@@ -117,4 +117,10 @@ variable "vpc_name" {
   description = "The name to give the virtual network"
   type        = "string"
   default     = "kube-net"
+}
+
+variable "ssh_user_bastion" {
+  description = "ssh user for bastion server"
+  type        = "string"
+  default     = "jenkins"
 }
