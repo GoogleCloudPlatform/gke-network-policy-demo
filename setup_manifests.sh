@@ -16,11 +16,15 @@
 # bash "strict-mode", fail immediately if there is a problem
 set -euo pipefail
 
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# shellcheck disable=SC1090
+source "$ROOT"/common.sh
+
 # A helper method to make calls to the gke cluster through the bastion.
 call_bastion() {
   local command=$1; shift;
   # shellcheck disable=SC2005
-  echo "$(gcloud compute ssh gke-demo-bastion --command "${command}")"
+  echo "$(gcloud compute ssh "${USER}"@gke-demo-bastion --command "${command}")"
 }
 MESSAGE="successfully rolled out"
 

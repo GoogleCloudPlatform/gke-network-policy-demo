@@ -15,6 +15,11 @@
 
 # bash "strict-mode", fail immediately if there is a problem
 set -euo pipefail
+
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# shellcheck disable=SC1090
+source "$ROOT"/common.sh
+
 HELLO_WORLD='Hello, world!'
 TIMED_OUT='wget: download timed out'
 
@@ -22,7 +27,7 @@ TIMED_OUT='wget: download timed out'
 call_bastion() {
   local command=$1; shift;
   # shellcheck disable=SC2005
-  echo "$(gcloud compute ssh gke-demo-bastion --command "${command}")"
+  echo "$(gcloud compute ssh "$USER"@gke-demo-bastion --command "${command}")"
 }
 
 # We expect to see "Hello, world!" in the logs with the app=hello label.
