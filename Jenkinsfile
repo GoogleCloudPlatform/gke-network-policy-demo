@@ -66,7 +66,7 @@ spec:
 
 // required by Terraform
 environment {
-        GOOGLE_APPLICATION_CREDENTIALS    = '/home/jenkins/dev/jenkins-deploy-dev-infra.json'
+   GOOGLE_APPLICATION_CREDENTIALS    = '/home/jenkins/dev/jenkins-deploy-dev-infra.json'
 }
 
 stages {
@@ -78,7 +78,7 @@ stages {
                 env.PROJECT_ID = "${PROJECT_ID}"
                 env.REGION = "${REGION}"
                 env.ZONE = "${ZONE}"
-                env.KEYFILE = "/home/jenkins/dev/jenkins-deploy-dev-infra.json"
+                env.KEYFILE = GOOGLE_APPLICATION_CREDENTIALS
             }
           // Setup gcloud service account access
           sh "gcloud auth activate-service-account --key-file=${env.KEYFILE}"
