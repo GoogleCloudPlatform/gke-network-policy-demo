@@ -19,6 +19,13 @@ This file defines the kubernetes cluster configuration. It is effectively a codi
 version of the Cloud Console form you would use to create a Kubernetes Engine cluster.
 */
 
+
+# Gets the current version of Kubernetes engine
+data "google_container_engine_versions" "gke_version" {
+  zone = "${var.zone}"
+}
+
+
 // https://www.terraform.io/docs/providers/google/d/google_container_cluster.html
 // Create the primary cluster for this project.
 resource "google_container_cluster" "primary" {
@@ -28,7 +35,7 @@ resource "google_container_cluster" "primary" {
   network            = "${google_compute_network.gke-network.self_link}"
   subnetwork         = "${google_compute_subnetwork.cluster-subnet.self_link}"
   initial_node_count = "${var.initial_node_count}"
-  min_master_version = "1.10.4"
+  min_master_version = "${data.google_container_engine_versions.gke_version.latest_master_version}"
   additional_zones   = []
 
   // Scopes necessary for the nodes to function correctly
