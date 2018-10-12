@@ -169,9 +169,17 @@ google_container_cluster.primary: Creation complete after 3m34s (ID: gke-demo-cl
 Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 ```
 
-You can also confirm the cluster was created successfully by logging into the cloud console and ensuring that Network Policies are enabled for the new cluster.
+You can also confirm the cluster was created successfully by ensuring that Network Policies are enabled for the new cluster. Verify that `networkPolicyConfig.disabled` is `false` and `networkPolicy.provider` is `CALICO`.
 
-![Cluster settings in console](./img/cluster_in_console.png)
+```console
+gcloud container clusters describe gke-demo-cluster | grep  -A1 networkPolicy
+  networkPolicyConfig:
+    disabled: true
+--
+networkPolicy:
+  provider: CALICO
+
+```
 
 Now ssh into the bastion for the remaining steps.
 
@@ -296,19 +304,7 @@ networkpolicy.networking.k8s.io/hello-server-allow-from-hello-client created
 
 Now observe the logs of the `hello-allowed-client` pod in the default namespace. You will notice it is no longer able to connect to the `hello-server`.
 
-Finally, create a namespace with the appropriate labels and deploy a second copy of the hello-clients app into it.
-
-```console
-kubectl create ns hello-apps
-
-namespace/hello-apps created
-```
-
-```console
-kubectl label ns hello-apps team=hello
-
-namespace/hello-apps labeled
-```
+Finally, deploy a second copy of the hello-clients app into the new namespace.
 
 ```console
 kubectl -n hello-apps apply -f ./manifests/hello-app/hello-client.yaml
@@ -316,6 +312,8 @@ kubectl -n hello-apps apply -f ./manifests/hello-app/hello-client.yaml
 deployment.apps/hello-client-allowed created
 deployment.apps/hello-client-blocked created
 ```
+
+### Validation
 
 Check the logs for the two new `hello-app` clients and you will see that both clients are able to connect successfully. This is because, *as of Kubernetes 1.10.x NetworkPolicies do not support restricting access to pods within a given namespace*. You can whitelist by pod label, namespace label, or whitelist the union (ie OR) of both. But you cannot yet whitelist the intersection (ie AND) of pod labels and namespace labels.
 
@@ -327,23 +325,6 @@ kubectl logs --tail 10 -f -n hello-apps $(kubectl get pods -oname -l app=hello -
 Hostname: hello-server-6c6fd59cc9-7fvgp
 Hello, world!
 Version: 1.0.0
-Hostname: hello-server-6c6fd59cc9-7fvgp
-Hello, world!
-Version: 1.0.0
-Hostname: hello-server-6c6fd59cc9-7fvgp
-Hello, world!
-Version: 1.0.0
-Hostname: hello-server-6c6fd59cc9-7fvgp
-Hello, world!
-Version: 1.0.0
-Hostname: hello-server-6c6fd59cc9-7fvgp
-```
-
-And view the logs for the "not-hello"-labeled app in the `hello-apps` namespace:
-
-```console
-kubectl logs --tail 10 -f -n hello-apps $(kubectl get pods -oname -l app=not-hello -n hello-apps)
-
 Hostname: hello-server-6c6fd59cc9-7fvgp
 Hello, world!
 Version: 1.0.0
