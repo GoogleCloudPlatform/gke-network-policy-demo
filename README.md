@@ -99,7 +99,7 @@ Updated property [compute/region].
 
 ```console
 # Where the zone inside the region is us-east1-c
-gcloud config set compute/zone us-east1-cA
+gcloud config set compute/zone us-east1-c
 
 Updated property [compute/zone].
 ```
