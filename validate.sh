@@ -23,6 +23,10 @@ source "$ROOT"/common.sh
 HELLO_WORLD='Hello, world!'
 TIMED_OUT='wget: download timed out'
 
+# Kubectl logs of the hello app pod will return $TIMED_OUT for the first 5 second.
+# So let's wait for a while before we start pulling logs
+sleep 20
+
 # A helper method to make calls to the gke cluster through the bastion.
 call_bastion() {
   local command=$1; shift;
