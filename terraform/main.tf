@@ -19,12 +19,10 @@ This file defines the kubernetes cluster configuration. It is effectively a codi
 version of the Cloud Console form you would use to create a Kubernetes Engine cluster.
 */
 
-
 # Gets the current version of Kubernetes engine
 data "google_container_engine_versions" "gke_version" {
   zone = "${var.zone}"
 }
-
 
 // https://www.terraform.io/docs/providers/google/d/google_container_cluster.html
 // Create the primary cluster for this project.
@@ -67,8 +65,12 @@ resource "google_container_cluster" "primary" {
     cluster_secondary_range_name = "secondary-range"
   }
 
-  master_ipv4_cidr_block = "${var.master_cidr_block}"
-  private_cluster        = true
+  // In a private cluster, the master has two IP addresses, one public and one
+  // private. Nodes communicate to the master through this private IP address.
+  private_cluster_config {
+    enable_private_nodes   = true
+    master_ipv4_cidr_block = "10.0.90.0/28"
+  }
 
   // (Required for private cluster, optional otherwise) network (cidr) from which cluster is accessible
   master_authorized_networks_config {

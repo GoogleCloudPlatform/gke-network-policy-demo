@@ -18,14 +18,14 @@ ROOT := ${CURDIR}
 # create/delete/validate is for CICD
 .PHONY: create
 create:
-	$(ROOT)/create.sh
+	$(ROOT)/scripts/create.sh
 .PHONY: delete
 teardown:
-	$(ROOT)/teardown.sh
+	$(ROOT)/scripts/teardown.sh
 
 .PHONY: validate
 validate:
-	${ROOT}/validate.sh
+	${ROOT}/scripts/validate.sh
 
 # All is the first target in the file so it will get picked up when you just run 'make' on its own
 lint: check_shell check_shebangs check_python check_golang check_terraform check_docker check_base_files check_headers check_trailing_whitespace

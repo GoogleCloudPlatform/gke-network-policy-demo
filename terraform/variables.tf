@@ -47,7 +47,7 @@ variable "bastion_machine_type" {
 }
 
 variable bastion_hostname {
-  type = "string"
+  type    = "string"
   default = "gke-demo-bastion"
 }
 

@@ -15,7 +15,7 @@
 # Defines a new namespace used to demonstrate whitelisting an entire namespace
 # See https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
 kind: Namespace
-apiVersion: core/v1
+apiVersion: v1
 metadata:
   name: hello-apps
   labels:
@@ -55,4 +55,3 @@ spec:
     - namespaceSelector:
         matchLabels:
           team: hello
-

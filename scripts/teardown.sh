@@ -16,12 +16,12 @@
 
 # "---------------------------------------------------------"
 # "-                                                       -"
-# "-  Create starts a GKE Cluster and installs             -"
-# "-  a Cassandra StatefulSet                              -"
+# "-  Delete uninstalls Cassandra and deletes              -"
+# "-  the GKE cluster                                      -"
 # "-                                                       -"
 # "---------------------------------------------------------"
 
-set -o errexit
+# Do not set errexit as it makes partial deletes impossible
 set -o nounset
 set -o pipefail
 
@@ -29,19 +29,11 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # shellcheck disable=SC1090
 source "$ROOT"/common.sh
 
-# Enable Compute Engine, Kubernetes Engine, and Container Builder
-echo "Enabling the Compute API, the Container API, the Cloud Build API"
-gcloud services enable \
-compute.googleapis.com \
-container.googleapis.com \
-cloudbuild.googleapis.com
+# Tear down hello-app
+gcloud compute ssh "${USER}"@"${BASTION_INSTANCE_NAME}" --command "kubectl delete -f manifests/hello-app/"
 
-# Runs the generate-tfvars.sh
-"$ROOT"/generate-tfvars.sh
+# remove metadata for bastion (SSH keys)
+gcloud compute instances remove-metadata --all "${BASTION_INSTANCE_NAME}" --project "${PROJECT}" --zone "${ZONE}"
 
-cd "$ROOT"/terraform && \
-terraform init -input=false && \
-terraform apply -input=false -auto-approve
-
-# Roll out hello-app
-"$ROOT"/setup_manifests.sh
+# Terraform destroy
+cd terraform && terraform destroy -auto-approve

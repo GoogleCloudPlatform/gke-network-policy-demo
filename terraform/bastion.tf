@@ -77,6 +77,7 @@ resource "google_compute_instance" "gke-bastion" {
   // Copy the manifests to the bastion
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
+
     command = <<EOF
         READY=""
         for i in $(seq 1 18); do
@@ -97,4 +98,9 @@ resource "google_compute_instance" "gke-bastion" {
         gcloud compute  --project ${var.project} scp --zone ${var.zone} --recurse ../manifests ${var.ssh_user_bastion}@${var.bastion_hostname}:
 EOF
   }
+
+  provisioner "local-exec" {
+    command = "gcloud compute scp --project ${var.project} --zone ${var.zone} --recurse ../scripts ${var.bastion_hostname}:"
+  }
+
 }

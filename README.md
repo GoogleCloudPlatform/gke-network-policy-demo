@@ -187,15 +187,16 @@ google_container_cluster.primary: Creation complete after 3m34s (ID: gke-demo-cl
 Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 ```
 
-You can also confirm the cluster was created successfully by ensuring that Network Policies are enabled for the new cluster. Verify that `networkPolicyConfig.disabled` is `false` and `networkPolicy.provider` is `CALICO`.
+You can also confirm the cluster was created successfully by ensuring that Network Policies are enabled for the new cluster.
 
 ```console
-gcloud container clusters describe gke-demo-cluster | grep  -A1 networkPolicy
-  networkPolicyConfig:
-    disabled: true
+
+$ gcloud container clusters describe gke-demo-cluster | grep  -A1 networkPolicy
+  networkPolicyConfig: {}
+clusterIpv4Cidr: 10.0.92.0/22
 --
 networkPolicy:
-  provider: CALICO
+  enabled: true
 
 ```
 
