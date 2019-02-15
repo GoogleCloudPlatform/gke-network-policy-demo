@@ -360,7 +360,7 @@ Hostname: hello-server-6c6fd59cc9-7fvgp
 Log out of the bastion host and run the following to destroy the environment:
 
 ```console
-make tf-destroy
+make teardown
 
 ...snip...
 google_compute_subnetwork.cluster-subnet: Still destroying... (ID: us-east1/kube-net-subnet, 20s elapsed)
