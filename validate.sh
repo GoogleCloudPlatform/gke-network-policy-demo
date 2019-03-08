@@ -66,3 +66,22 @@ call_bastion "kubectl logs --tail 10 \$(kubectl get pods -oname -l app=hello)" \
 echo "step 4 of the validation passed."
 
 call_bastion "kubectl delete -f ./manifests/network-policy.yaml" &> /dev/null
+
+# Now we test applying network policy based on residing namespace
+# This will create a hello-apps namespace and restrict access to hello-server only from this namespace
+call_bastion "kubectl apply -f ./manifests/network-policy-namespaced.yaml" &> /dev/null
+
+# http clients running in default namespace should be failing now
+call_bastion "kubectl logs --tail 10 \
+ \$(kubectl get pods -oname -l app=not-hello)" | grep "$TIMED_OUT" \
+ &> /dev/null || exit 1
+echo "step 5 of the validation passed."
+
+# Now let's install client pods into hello-apps and test from there
+call_bastion "kubectl apply -f ./manifests/hello-app/hello-client.yaml -n hello-apps" &> /dev/null
+
+# Now we make sure these new pods running in hello-apps namespace will be working
+call_bastion "kubectl logs --tail 10 \$(kubectl get pods -oname -l app=hello -n hello-apps) -n hello-apps" \
+| grep "$HELLO_WORLD" &> /dev/null || exit 1
+echo "step 6 of the validation passed."
+
