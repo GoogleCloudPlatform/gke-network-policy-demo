@@ -49,6 +49,46 @@ Within the cluster, provision three workloads:
 
 ![architecture](./img/architecture.png)
 
+## Prerequisites
+
+### Run Demo in a Google Cloud Shell
+
+Click the button below to run the demo in a [Google Cloud Shell](https://cloud.google.com/shell/docs/).
+
+[![Open in Cloud Shell](http://gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/gke-network-policy-demo.git&amp;cloudshell_image=gcr.io/graphite-cloud-shell-images/terraform:latest&amp;cloudshell_tutorial=README.md)
+
+All the tools for the demo are installed. When using Cloud Shell execute the following
+command in order to setup gcloud cli. When executing this command please setup your region
+and zone.
+
+```console
+gcloud init
+```
+
+
+### Tools
+1. [Terraform >= 0.11.7](https://www.terraform.io/downloads.html)
+2. [Google Cloud SDK version >= 204.0.0](https://cloud.google.com/sdk/docs/downloads-versioned-archives)
+3. [kubectl matching the latest GKE version](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+4. bash or bash compatible shell
+5. [GNU Make 3.x or later](https://www.gnu.org/software/make/)
+6. A Google Cloud Platform project where you have permission to create networks
+
+#### Install Cloud SDK
+The Google Cloud SDK is used to interact with your GCP resources.
+[Installation instructions](https://cloud.google.com/sdk/downloads) for multiple platforms are available online.
+
+#### Install kubectl CLI
+
+The kubectl CLI is used to interteract with both Kubernetes Engine and kubernetes in general.
+[Installation instructions](https://cloud.google.com/kubernetes-engine/docs/quickstart)
+for multiple platforms are available online.
+
+#### Install Terraform
+
+Terraform is used to automate the manipulation of cloud infrastructure. Its
+[installation instructions](https://www.terraform.io/intro/getting-started/install.html) are also available online.
+
 ## Deployment
 
 The steps below will walk you through using terraform to deploy a Kubernetes Engine cluster that you will then use for working with Kubernetes network policies.
