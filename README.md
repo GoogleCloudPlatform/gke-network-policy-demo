@@ -18,7 +18,6 @@
 * [Validation](#validation)
 * [Installing the hello server](#installing-the-hello-server)
 * [Restricting access with a Network Policy](#restricting-access-with-a-network-policy)
-* [Restricting access with a Network Policy](#restricting-access-with-a-network-policy-1)
 * [Restricting namespaces with Network Policies](#restricting-namespaces-with-network-policies)
 * [Tear Down](#tear-down)
 * [Troubleshooting](#troubleshooting)
