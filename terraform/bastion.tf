@@ -30,10 +30,11 @@ sudo apt-get install -y kubectl
 echo "gcloud container clusters get-credentials $${cluster_name} --zone $${cluster_zone} --project $${project}" >> /etc/profile
 EOF
 
-  vars {
-    cluster_name = "${var.cluster_name}"
-    cluster_zone = "${var.zone}"
-    project      = "${var.project}"
+
+  vars = {
+    cluster_name = var.cluster_name
+    cluster_zone = var.zone
+    project = var.project
   }
 }
 
@@ -41,11 +42,11 @@ EOF
 // bastion host for access and administration of a private cluster.
 
 resource "google_compute_instance" "gke-bastion" {
-  name                      = "${var.bastion_hostname}"
-  machine_type              = "${var.bastion_machine_type}"
-  zone                      = "${var.zone}"
-  project                   = "${var.project}"
-  tags                      = "${var.bastion_tags}"
+  name = var.bastion_hostname
+  machine_type = var.bastion_machine_type
+  zone = var.zone
+  project = var.project
+  tags = var.bastion_tags
   allow_stopping_for_update = true
 
   // Specify the Operating System Family and version.
@@ -57,7 +58,7 @@ resource "google_compute_instance" "gke-bastion" {
 
   // Define a network interface in the correct subnet.
   network_interface {
-    subnetwork = "${google_compute_subnetwork.cluster-subnet.self_link}"
+    subnetwork = google_compute_subnetwork.cluster-subnet.self_link
 
     // Add an ephemeral external IP.
     access_config {
@@ -67,13 +68,14 @@ resource "google_compute_instance" "gke-bastion" {
 
   // Ensure that when the bastion host is booted, it will have kubectl.
   # metadata_startup_script = "sudo apt-get install -y kubectl"
-  metadata_startup_script = "${data.template_file.startup_script.rendered}"
+  metadata_startup_script = data.template_file.startup_script.rendered
 
   // Necessary scopes for administering kubernetes.
   service_account {
     scopes = ["userinfo-email", "compute-ro", "storage-ro", "cloud-platform"]
   }
 
+  // Copy the manifests to the bastion
   // Copy the manifests to the bastion
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-c"]
@@ -96,5 +98,6 @@ resource "google_compute_instance" "gke-bastion" {
 
         gcloud compute  --project ${var.project} scp --zone ${var.zone} --recurse ../manifests ${var.ssh_user_bastion}@${var.bastion_hostname}:
 EOF
-  }
+
+}
 }

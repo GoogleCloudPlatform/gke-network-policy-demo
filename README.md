@@ -69,8 +69,8 @@ gcloud init
 
 
 ### Tools
-1. [Terraform >= 0.11.7](https://www.terraform.io/downloads.html)
-2. [Google Cloud SDK version >= 204.0.0](https://cloud.google.com/sdk/docs/downloads-versioned-archives)
+1. [Terraform >= 0.12.3](https://www.terraform.io/downloads.html)
+2. [Google Cloud SDK version >= 253.0.0](https://cloud.google.com/sdk/docs/downloads-versioned-archives)
 3. [kubectl matching the latest GKE version](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 4. bash or bash compatible shell
 5. [GNU Make 3.x or later](https://www.gnu.org/software/make/)
