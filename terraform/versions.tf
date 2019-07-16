@@ -14,20 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// https://www.terraform.io/docs/providers/google/r/compute_firewall.html
-// Defines a firewall rule to allow access to the bastion host is accessible
-resource "google_compute_firewall" "bastion-ssh" {
-  name          = "bastion-ssh"
-  network       = google_compute_network.gke-network.self_link
-  direction     = "INGRESS"
-  project       = var.project
-  source_ranges = ["0.0.0.0/0"]
-
-  allow {
-    protocol = "tcp"
-    ports    = ["22"]
-  }
-
-  target_tags = var.bastion_tags
+ terraform {
+  required_version = ">= 0.12"
 }
-

@@ -16,7 +16,8 @@ limitations under the License.
 
 // Configures the GCP Cloud Provider with default project and region
 provider "google" {
-  project = "${var.project}"
-  region  = "${var.region}"
-  version = "~> 1.13"
+  project = var.project
+  region  = var.region
+  version = "~> 2.10.0"
 }
+
