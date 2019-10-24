@@ -18,6 +18,6 @@ limitations under the License.
 provider "google" {
   project = var.project
   region  = var.region
-  version = "~> 2.10.0"
+  version = "~> 2.17.0"
 }
 
