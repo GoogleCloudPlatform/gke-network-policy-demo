@@ -21,7 +21,6 @@ version of the Cloud Console form you would use to create a Kubernetes Engine cl
 
 # Gets the current version of Kubernetes engine
 data "google_container_engine_versions" "gke_version" {
-  zone = var.zone
 }
 
 // https://www.terraform.io/docs/providers/google/d/google_container_cluster.html
