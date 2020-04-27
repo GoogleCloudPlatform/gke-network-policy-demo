@@ -44,7 +44,7 @@ spec:
 ---
 
 # Deploys a pod to service hello-server requests
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   # Label and name the deployment

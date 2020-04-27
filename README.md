@@ -218,7 +218,7 @@ kubectl apply -f ./manifests/hello-app/
 deployment.apps/hello-client-allowed created
 deployment.apps/hello-client-blocked created
 service/hello-server created
-deployment.extensions/hello-server created
+deployment.apps/hello-server created
 ```
 
 Use `kubectl get pods`` to verify all three pods have been successfully deployed.
