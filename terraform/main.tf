@@ -46,7 +46,7 @@ resource "google_container_cluster" "primary" {
     ]
 
     machine_type = var.node_machine_type
-    image_type   = "COS"
+    image_type   = "COS_CONTAINERD"
 
     // (Optional) The Kubernetes labels (key/value pairs) to be applied to each node.
     labels = {
