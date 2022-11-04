@@ -34,18 +34,20 @@ call_bastion() {
   echo "$(gcloud compute ssh "$USER"@gke-demo-bastion --command "${command}")"
 }
 
+error_out() {
+  echo "Step $1 failed. Exiting"
+  exit 1
+}
 # We expect to see "Hello, world!" in the logs with the app=hello label.
 call_bastion "kubectl logs --tail 10 \$(kubectl get pods -oname -l app=hello)" \
-| grep "$HELLO_WORLD" &> /dev/null || exit 1
+| grep "$HELLO_WORLD" &> /dev/null || error_out 1 
 echo "step 1 of the validation passed."
-
 # We expect to see the same behavior in the logs with the app=not-hello label
 # until the network-policy is applied.
 call_bastion "kubectl logs --tail 10 \
  \$(kubectl get pods -oname -l app=not-hello)" | grep "$HELLO_WORLD" \
- &> /dev/null || exit 1
+ &> /dev/null || error_out 1
 echo "step 2 of the validation passed."
-
 # Apply the network policy.
 call_bastion "kubectl apply -f ./manifests/network-policy.yaml" &> /dev/null
 
@@ -56,13 +58,30 @@ sleep 10
 # prevents the communication.
 call_bastion "kubectl logs --tail 10 \
  \$(kubectl get pods -oname -l app=not-hello)" | grep "$TIMED_OUT" \
- &> /dev/null || exit 1
+ &> /dev/null || error_out 1
 echo "step 3 of the validation passed."
 
 # If the network policy is working correctly, we still see the original behavior
 # in the logs with the app=hello label.
 call_bastion "kubectl logs --tail 10 \$(kubectl get pods -oname -l app=hello)" \
-| grep "$HELLO_WORLD" &> /dev/null || exit 1
+| grep "$HELLO_WORLD" &> /dev/null || error_out 1
 echo "step 4 of the validation passed."
 
 call_bastion "kubectl delete -f ./manifests/network-policy.yaml" &> /dev/null
+
+# Now we test applying network policy based on residing namespace
+# This will create a hello-apps namespace and restrict access to hello-server only from this namespace
+call_bastion "kubectl apply -f ./manifests/network-policy-namespaced.yaml" &> /dev/null
+
+# http clients running in default namespace should be failing now
+call_bastion "kubectl logs --tail 10 \
+ \$(kubectl get pods -oname -l app=not-hello)" | grep "$TIMED_OUT" \
+ &> /dev/null || error_out 1
+echo "step 5 of the validation passed."
+
+# Now let's install client pods into hello-apps and test from there
+call_bastion "kubectl apply -f ./manifests/hello-app/hello-client.yaml -n hello-apps" &> /dev/null
+# Now we make sure these new pods running in hello-apps namespace will be working
+call_bastion "kubectl logs --tail 10 \$(kubectl get pods -oname -l app=hello -n hello-apps) -n hello-apps" \
+| grep "x$HELLO_WORLD" &> /dev/null || error_out 1
+echo "step 6 of the validation passed."
